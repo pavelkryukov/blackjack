@@ -33,7 +33,7 @@ public class Hand {
      * 
      * @return score of the hand
      */
-    public int Score() {
+    public int score() {
         int number_of_aces = 0;
         int score = 0;
         
@@ -89,14 +89,14 @@ public class Hand {
     /**
      *  Add card to hand
      */
-    public void AddCard(Card card) {
+    public void addCard(Card card) {
         cards.add(card);
     }
     
     /**
      * Clear the hand
      */
-    public void Clear() {
+    public void clear() {
         cards.clear();
     }
     
