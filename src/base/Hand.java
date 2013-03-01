@@ -55,11 +55,11 @@ public class Hand {
             case SEVEN: score += 7; break;
             case EIGHT: score += 8; break;
             case NINE:  score += 9; break;
-            case TEN:    score += 10; break;
+            case TEN:   score += 10; break;
             
             /* Face cards are counted as ten points. */
-            case JACK:    score += 10; break;
-            case QUEEN:    score += 10; break;
+            case JACK:  score += 10; break;
+            case QUEEN: score += 10; break;
             case KING:  score += 10; break;
             
             /* Aces will be counted later, depending on score without aces. */
