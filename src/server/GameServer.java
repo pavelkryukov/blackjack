@@ -35,7 +35,6 @@ public class GameServer {
 		while (!requests.isEmpty()) {
 			this.casino.ProcessRequest(requests.poll());
 		}
-		
 	}
 
 	private void ReadCommands() {
