@@ -100,5 +100,9 @@ public class Hand {
         cards.clear();
     }
     
+    public Boolean hasLost() {
+    	return this.score() > 21;
+    }
+    
     private ArrayList<Card> cards;
 }

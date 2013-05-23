@@ -1,15 +1,12 @@
 package server;
 
+import base.Card;
 import base.Hand;
 import base.Request;
 
 public class Player {
 	public class InvalidRequestException extends Exception {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-		
+		private static final long serialVersionUID = 1L;	
 	}
 	
 	private Hand hand;
@@ -22,24 +19,37 @@ public class Player {
 		this.isReady = false;
 	}
 	
+	private void LoseGame() {
+		isInGame = false;
+		isReady  = false;
+	}
+	
 	public void ProcessRequest(Request req) throws InvalidRequestException{
 		switch (req.GetType()) {
-		case CONNECT:
-		case DISCONNECT:
-			throw new InvalidRequestException();
 		case RESIGN:
-			isInGame = false;
+			this.LoseGame();
 			break;
 		case START:
 			isReady = true;
 			break;
+		default:
+			throw new InvalidRequestException();
 		}
 	}
-	
+
 	public Boolean IsInGame() { return isInGame; }
 	public Boolean IsReady() { return isReady; }
 	public void SetInGame() {
 		isInGame = true;
 		isReady = false;
+	}
+
+	public void GetCard(Card card) {
+		hand.addCard(card);
+	}
+	
+	public void UpdateIfLost() {
+		if (hand.hasLost())
+			LoseGame();
 	}
 }

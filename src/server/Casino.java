@@ -3,15 +3,24 @@ package server;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import base.Deck;
 import base.Request;
 
 public class Casino {
 	private HashMap<String, Player> players;
 	private Boolean isGame;
+	private Deck deck;
 
 	public Casino() {
 		this.players = new HashMap<String, Player>();
 		this.isGame = false;
+		this.deck = new Deck();
+	}
+	
+	private void DropLosers() {
+		for (Entry<String, Player> entry : players.entrySet()) {
+			entry.getValue().UpdateIfLost();
+		}
 	}
 
 	private Boolean GameShouldBeStarted() {
@@ -24,10 +33,12 @@ public class Casino {
 		}
 		return true;
 	}
-	
+
 	private void StartGame() {
 		for (Entry<String, Player> entry : players.entrySet()) {
 			entry.getValue().SetInGame();
+			entry.getValue().GetCard(deck.GetCard());
+			entry.getValue().GetCard(deck.GetCard());
 		}
 		isGame = true;
 	}
@@ -46,6 +57,9 @@ public class Casino {
 		else if (!isGame) {
 			System.out.println("Request from " + id + " is dropped because draw is over");
 		}
+		else if (req.IsGive()) {
+			players.get(id).GetCard(deck.GetCard());
+		}
 		else if (players.get(id).IsInGame()) {
 			try {
 				players.get(id).ProcessRequest(req);
@@ -61,7 +75,14 @@ public class Casino {
 	}
 
 	private void UpdateState() {
-		if (GameShouldBeStarted())
-			StartGame();
+		if ( isGame) {
+			DropLosers();
+		}
+		else {
+			if (GameShouldBeStarted()) {
+				StartGame();
+			}
+		}
 	}
+
 }

@@ -8,22 +8,31 @@ package base;
  */
 public class Card {
     public enum Rank  { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN,
-                        EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE };
+                        EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE ;
+    	public static Rank getRandom() {
+    		return values()[(int) (Math.random() * values().length)];
+    	}
+    }
 
-    public enum Suit  { SPADES, HEARTS, DIAMONDS, CLUBS };
+    public enum Suit  { SPADES, HEARTS, DIAMONDS, CLUBS;
+    	public static Suit getRandom() {
+    		return values()[(int) (Math.random() * values().length)];
+    	}
+    }
 
     public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
     }
 
-    private Rank rank;
-    private Suit suit;
+    final private Rank rank;
+    final private Suit suit;
 
     public Rank getRank() { return rank; }
-    public void setRank(Rank rank) { this.rank = rank; }
-
     public Suit getSuit() { return suit; }
-    public void setSuit(Suit suit) { this.suit = suit; }
+    
+    public static Card GetRandomCard() {
+    	return new Card(Rank.getRandom(), Suit.getRandom());
+    }
 }
 
