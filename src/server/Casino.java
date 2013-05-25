@@ -8,6 +8,7 @@ import base.Player;
 import base.Request;
 
 public class Casino extends CasinoPublic {
+	private static final long serialVersionUID = 1L;
 	private Deck deck;
 
 	public Casino() {

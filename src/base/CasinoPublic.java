@@ -6,7 +6,7 @@ import java.util.HashMap;
 import base.Player;
 
 public class CasinoPublic implements Serializable {
-	protected static final long serialVersionUID = 1L;
+	public static final long serialVersionUID = 1L;
 	protected HashMap<String, Player> players;
 	protected Boolean isGame;
 	protected CasinoPublic() {
