@@ -47,9 +47,18 @@ public class Casino {
 		final String id = req.GetId();
 		if (req.IsConnect()) {
 			players.put(id, new Player());
+			System.out.println("Player " + id + " joined Casino");
 		}
 		else if (!players.containsKey(id)) {
 			System.out.println("There is no player " + id + " in current game");
+		}
+		else if (req.IsStart()) {
+			try {
+				players.get(id).ProcessRequest(req);
+			}
+			catch (Player.InvalidRequestException e) {
+				System.out.println("Internal error: unhandled request");
+			}
 		}
 		else if (req.IsDisconnect()) {
 			players.remove(id);
@@ -65,7 +74,7 @@ public class Casino {
 				players.get(id).ProcessRequest(req);
 			}
 			catch (Player.InvalidRequestException e) {
-				System.out.println("Internal error: unhandled connect/disconnect request");
+				System.out.println("Internal error: unhandled request");
 			}
 		}
 		else {

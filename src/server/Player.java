@@ -12,7 +12,7 @@ public class Player {
 	private Hand hand;
 	private Boolean isInGame;
 	private Boolean isReady;
-	
+
 	public Player() {
 		this.hand = new Hand();
 		this.isInGame = false;
