@@ -29,6 +29,9 @@ public class Request {
 	public Boolean IsGive() {
 		return type == Type.GIVE;
 	}
+	public Boolean IsStart() {
+		return type == Type.START;
+	}
 	public Type GetType() {
 		return type;
 	}
