@@ -23,7 +23,6 @@ public class GameServer {
 			DoCommands();
 			SendCards();
 		}
-		
 	}
 
 	private void SendCards() {
