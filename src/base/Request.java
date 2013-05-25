@@ -1,6 +1,9 @@
 package base;
 
-public class Request {	
+import java.io.Serializable;
+
+public class Request implements Serializable {	
+	private static final long serialVersionUID = 1L;
 	public enum Type {
 		CONNECT,    // User wants to join Casino
 		DISCONNECT, // User wants to leave Casino
@@ -28,6 +31,9 @@ public class Request {
 	}
 	public Boolean IsGive() {
 		return type == Type.GIVE;
+	}
+	public Boolean IsStart() {
+		return type == Type.START;
 	}
 	public Type GetType() {
 		return type;

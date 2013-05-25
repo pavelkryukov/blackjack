@@ -1,22 +1,20 @@
 package server;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
 
+import base.CasinoPublic;
 import base.Deck;
+import base.Player;
 import base.Request;
 
-public class Casino {
-	private HashMap<String, Player> players;
-	private Boolean isGame;
+public class Casino extends CasinoPublic {
+	private static final long serialVersionUID = 1L;
 	private Deck deck;
 
 	public Casino() {
-		this.players = new HashMap<String, Player>();
-		this.isGame = false;
 		this.deck = new Deck();
 	}
-	
+
 	private void DropLosers() {
 		for (Entry<String, Player> entry : players.entrySet()) {
 			entry.getValue().UpdateIfLost();
@@ -45,31 +43,37 @@ public class Casino {
 
 	public void ProcessRequest(Request req) {
 		final String id = req.GetId();
+		final Boolean isPlayerFound = players.containsKey(id);
 		if (req.IsConnect()) {
-			players.put(id, new Player());
+			if (isPlayerFound) {
+				System.out.println("Player " + id + " is already in Casino");
+			}
+			else {
+				players.put(id, new Player());
+				System.out.println("Player " + id + " joined Casino");
+			}
 		}
-		else if (!players.containsKey(id)) {
+		else if (!isPlayerFound) {
 			System.out.println("There is no player " + id + " in current game");
 		}
 		else if (req.IsDisconnect()) {
 			players.remove(id);
 		}
-		else if (!isGame) {
-			System.out.println("Request from " + id + " is dropped because draw is over");
-		}
 		else if (req.IsGive()) {
-			players.get(id).GetCard(deck.GetCard());
+			if (players.get(id).IsInGame()) {
+				players.get(id).GetCard(deck.GetCard());
+			}
+			else {
+				System.out.println("Player " + id + " is not in game anymore, request dropped");
+			}
 		}
-		else if (players.get(id).IsInGame()) {
+		else {
 			try {
 				players.get(id).ProcessRequest(req);
 			}
 			catch (Player.InvalidRequestException e) {
-				System.out.println("Internal error: unhandled connect/disconnect request");
+				System.out.println("Internal error: unhandled request");
 			}
-		}
-		else {
-			System.out.println("Request from " + id + " is dropped because user had left the game");
 		}
 		UpdateState();
 	}
