@@ -43,40 +43,37 @@ public class Casino extends CasinoPublic {
 
 	public void ProcessRequest(Request req) {
 		final String id = req.GetId();
+		final Boolean isPlayerFound = players.containsKey(id);
 		if (req.IsConnect()) {
-			players.put(id, new Player());
-			System.out.println("Player " + id + " joined Casino");
+			if (isPlayerFound) {
+				System.out.println("Player " + id + " is already in Casino");
+			}
+			else {
+				players.put(id, new Player());
+				System.out.println("Player " + id + " joined Casino");
+			}
 		}
-		else if (!players.containsKey(id)) {
+		else if (!isPlayerFound) {
 			System.out.println("There is no player " + id + " in current game");
-		}
-		else if (req.IsStart()) {
-			try {
-				players.get(id).ProcessRequest(req);
-			}
-			catch (Player.InvalidRequestException e) {
-				System.out.println("Internal error: unhandled request");
-			}
 		}
 		else if (req.IsDisconnect()) {
 			players.remove(id);
 		}
-		else if (!isGame) {
-			System.out.println("Request from " + id + " is dropped because draw is over");
-		}
 		else if (req.IsGive()) {
-			players.get(id).GetCard(deck.GetCard());
+			if (players.get(id).IsInGame()) {
+				players.get(id).GetCard(deck.GetCard());
+			}
+			else {
+				System.out.println("Player " + id + " is not in game anymore, request dropped");
+			}
 		}
-		else if (players.get(id).IsInGame()) {
+		else {
 			try {
 				players.get(id).ProcessRequest(req);
 			}
 			catch (Player.InvalidRequestException e) {
 				System.out.println("Internal error: unhandled request");
 			}
-		}
-		else {
-			System.out.println("Request from " + id + " is dropped because user had left the game");
 		}
 		UpdateState();
 	}
