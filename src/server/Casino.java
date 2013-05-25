@@ -1,22 +1,19 @@
 package server;
 
-import java.util.HashMap;
 import java.util.Map.Entry;
 
+import base.CasinoPublic;
 import base.Deck;
+import base.Player;
 import base.Request;
 
-public class Casino {
-	private HashMap<String, Player> players;
-	private Boolean isGame;
+public class Casino extends CasinoPublic {
 	private Deck deck;
 
 	public Casino() {
-		this.players = new HashMap<String, Player>();
-		this.isGame = false;
 		this.deck = new Deck();
 	}
-	
+
 	private void DropLosers() {
 		for (Entry<String, Player> entry : players.entrySet()) {
 			entry.getValue().UpdateIfLost();

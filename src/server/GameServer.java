@@ -27,7 +27,7 @@ public class GameServer {
 	}
 
 	private void SendCards() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
