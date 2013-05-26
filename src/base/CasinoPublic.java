@@ -8,7 +8,6 @@ import base.Player;
 public class CasinoPublic implements Serializable {
 	public static final long serialVersionUID = 1L;
 	public HashMap<String, Player> players;
-	public Player dealer;
 	public Boolean isGame;
 	public CasinoPublic() {
 		this.players = new HashMap<String, Player>();

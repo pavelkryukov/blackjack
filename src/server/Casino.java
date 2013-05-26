@@ -58,7 +58,6 @@ public class Casino extends CasinoPublic {
 			entry.getValue().GetCard(deck.GetCard());
 			entry.getValue().GetCard(deck.GetCard());
 		}
-		dealer.GetCard(deck.GetCard());
 		isGame = true;
 	}
 
