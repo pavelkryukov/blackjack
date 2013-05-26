@@ -7,7 +7,7 @@ package base;
  *  Playing card
  */
 public class Card {
-    public enum Rank  { ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN,
+    public enum Rank  { TWO, THREE, FOUR, FIVE, SIX, SEVEN,
                         EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE ;
     	public static Rank getRandom() {
     		return values()[(int) (Math.random() * values().length)];

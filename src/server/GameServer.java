@@ -23,18 +23,18 @@ public class GameServer {
 
 	public GameServer()
 	{
+		// Initialize game situation
 		this.casino = new Casino();
 		this.requests = new LinkedList<Request>();
 		this.addresses = new HashSet<InetAddress>();
+
+		// Initialize socket
 		try {
 			this.serverSocket = new ServerSocket(7000);
 		} catch (IOException e) {
         	System.out.println("Error during server initialization");
 			e.printStackTrace();
 		}
-		// Get my IP address and print
-		// Initialize write sockets
-		// Initialize game situation
 	}
 
 	private void Run()
@@ -44,7 +44,6 @@ public class GameServer {
 			DoCommands();
 			SendCards();
 		}
-		
 	}
 
 	private void SendCards() {

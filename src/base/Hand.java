@@ -11,6 +11,7 @@ import java.util.ArrayList;
  *  Hand is a collection of cards.
  */
 public class Hand {
+	private static final int BLACKJACK = 21;
     
     /**
      * Create empty Hand
@@ -101,7 +102,7 @@ public class Hand {
     }
     
     public Boolean hasLost() {
-    	return this.score() > 21;
+    	return this.score() > BLACKJACK;
     }
     
     public ArrayList<Card> cards;
