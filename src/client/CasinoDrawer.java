@@ -22,13 +22,21 @@ public class CasinoDrawer {
 		this.pld = new PlayerDrawer(res);
 	}
 	
-	public void DrawCasino(CasinoPublic casino) {
+	public void DrawCasino(CasinoPublic casino, String myName) {
 		int offset = 0;
-        for(Player player: casino.players.values()) {
-            pld.drawPlayer(player, players_x + offset, players_y, players_x_delta - free_x_space_between_players);
-            offset += players_x_delta;
+		Player me = null;
+        for (Player player: casino.players.values()) {
+        	if (player.getName() == myName) {
+        		me = player;
+        	}
+        	else {
+        		pld.drawPlayer(player, players_x + offset, players_y, players_x_delta - free_x_space_between_players);
+        		offset += players_x_delta;
+        	}
         }
-        
-        pld.drawPlayer(casino.dealer, dealer_x, dealer_y, dealer_width);
+ 
+        if (me != null) {
+        	pld.drawPlayer(me, dealer_x, dealer_y, dealer_width);
+        }
 	}
 }

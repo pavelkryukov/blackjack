@@ -30,6 +30,8 @@ public class Player {
 		case START:
 			isReady = true;
 			break;
+		case REFRESH:
+			break;
 		default:
 			throw new InvalidRequestException();
 		}

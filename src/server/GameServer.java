@@ -17,7 +17,6 @@ import java.util.Set;
 
 import base.CasinoPublic;
 import base.Request;
-import base.Settings;
 
 public class GameServer {
 	/**
@@ -49,7 +48,7 @@ public class GameServer {
 
 		// Initialize socket
 		try {
-			this.serverSocket = new ServerSocket(Settings.port);
+			this.serverSocket = new ServerSocket(7200);
 		} catch (IOException e) {
         	System.out.println("Error during server initialization");
 			e.printStackTrace();
@@ -70,16 +69,20 @@ public class GameServer {
 	 */
 	private void SendCards() {
 		for (InetAddress address : addresses) {
+			for (int i = 0; i < 5; ++i) {
 			try {
 				Socket clientSocket = new Socket(address, 7100);
 				ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
 				objectOutput.writeObject((CasinoPublic)casino);
 				clientSocket.close();
+				break;
 			} catch (IOException e) {
 				// Connection failed, delete this address from set
             	System.out.println("Invalid IP " + address.toString());	
-            	addresses.remove(address);
+            //	if (i == 4)
+            //		addresses.remove(address);
 			}
+		}
 		}
 	}
 
@@ -108,6 +111,7 @@ public class GameServer {
             	System.out.println("Incorrect request is received");
                 e.printStackTrace();
             }
+        	System.out.println("Request from " + clientConn.getInetAddress() + " received");
             clientConn.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

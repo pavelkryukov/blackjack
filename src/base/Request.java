@@ -10,6 +10,7 @@ public class Request implements Serializable {
 		START,      // User is ready to start a new game
 		RESIGN,     // User does not want to continue current game
 		GIVE,		// User wants to get a new card
+		REFRESH,    // Empty request
 	}
 
 	final private String id;

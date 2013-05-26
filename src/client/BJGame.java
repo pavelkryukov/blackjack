@@ -5,9 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.nio.channels.SocketChannel;
 import java.util.Random;
 
 import org.newdawn.slick.AppGameContainer;
@@ -38,6 +36,9 @@ public class BJGame extends BasicGame {
 	public SimpleButton refresh_button;
 
 	
+	public SimpleButton start_button;
+	public SimpleButton refresh_button;
+
 	public static Resources resources;
     private StickyListener listener;
         
@@ -58,6 +59,7 @@ public class BJGame extends BasicGame {
                 return;
         	}
         	
+
         	System.out.println("Welcome, " + id + " !");
             
         	AppGameContainer app = new AppGameContainer(new BJGame());
@@ -74,7 +76,7 @@ public class BJGame extends BasicGame {
 		while (true) {
             try {
                 InetAddress addr = InetAddress.getByName(ip);
-                Socket s = new Socket(addr, Settings.port);
+                Socket s = new Socket(addr, 7200);
                 ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
                 out.writeObject(new Request(id, req));
                 s.close();
@@ -89,97 +91,82 @@ public class BJGame extends BasicGame {
         System.out.println("Request sent");
 	}
         
-	private void receiveCards() throws IOException, ClassNotFoundException {
+	private void receiveCards() {
 		System.out.println("Receiver Start");
 
-    	SocketChannel sChannel = SocketChannel.open();
-    	sChannel.configureBlocking(true);
-    	if (sChannel.connect(new InetSocketAddress(ip, 7100))) {
-
-    		ObjectInputStream ois = 
-                     new ObjectInputStream(sChannel.socket().getInputStream());
-
-    		CasinoPublic cas_pub = (CasinoPublic)ois.readObject();
-    		System.out.println("Received Casino: '" + cas_pub.players.size() + "'");
-    	}
-
-    	System.out.println("End Receiver");
+		try {
+			Socket socket = new Socket(InetAddress.getByName(ip), 7300);
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            try {
+                Object object = (CasinoPublic) in.readObject();
+                CasinoPublic tmp = (CasinoPublic) object;
+                casino = tmp;
+            } catch (ClassNotFoundException e) {
+            	System.out.println("Incorrect request is received");
+            }
+            socket.close();
+		} catch (Exception e) {
+            
+		}
 	}
-	
+
     public void init(GameContainer container) throws SlickException {
     	resources = new Resources();
     	resources.load();
-    	
+    
 		try {
 			sendReqest(Request.Type.CONNECT);
 		} catch (IOException | InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
-    	
-    	Player player1 = new Player("Vasya");
-    	Player player2 = new Player("Luba");
-    	Player player3 = new Player("Vachik");
-    	Player player4 = new Player("Kryukov Pavel I");
-    	Player dealer = new Player("Dealer");
 
     	cdr = new CasinoDrawer(resources);
     	casino = new CasinoPublic();
-    	
-    	for(int i = 0; i < 4; i++) {
-    		player1.GetCard(Card.GetRandomCard());
-    		player2.GetCard(Card.GetRandomCard());
-    		dealer.GetCard(Card.GetRandomCard());
-    	}
-    	
-    	for(int i = 0; i < 4; i++) {
-    		player2.GetCard(Card.GetRandomCard());
-    	}
-    	
-		player3.GetCard(Card.GetRandomCard());
-		player4.GetCard(Card.GetRandomCard());
-		player4.GetCard(Card.GetRandomCard());
-		player2.GetCard(Card.GetRandomCard());
-		player2.GetCard(Card.GetRandomCard());
-		
-		dealer.GetCard(Card.GetRandomCard());
-		dealer.GetCard(Card.GetRandomCard());
 
-
-    	casino.players.put(player1.getName(), player1);
-    	casino.players.put(player2.getName(), player2);
-    	casino.players.put(player3.getName(), player3);
-    	casino.players.put(player4.getName(), player4);
-    	casino.dealer = dealer;
-    	
-    	casino.isGame = true;
         listener = new StickyListener();
         container.getInput().addListener(listener);
-        
+
+        refresh_button = new SimpleButton(new Rectangle(330, 350, 150, 50), resources.refresh_up, resources.refresh_down);
+        refresh_button.addListener(new ClickListener() {
+            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.REFRESH);}
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
+        listener.add(refresh_button);
+
         hit_button = new SimpleButton(new Rectangle(490, 350, 150, 50), resources.hit_up, resources.hit_down);
         hit_button.addListener(new ClickListener() {
-            public void onClick(Button clicked, float mx, float my) {Hit();}
+            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.GIVE);}
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         listener.add(hit_button);
-        
+
         stand_button = new SimpleButton(new Rectangle(650, 350, 150, 50), resources.stand_up, resources.stand_down);
         stand_button.addListener(new ClickListener() {
-            public void onClick(Button clicked, float mx, float my) {Stand();}
+            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.RESIGN);}
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         listener.add(stand_button);
+<<<<<<< HEAD
 
         
         start_button = new SimpleButton(new Rectangle(50, 50, 150, 50), resources.start_up, resources.start_down);
         start_button.addListener(new ClickListener() {
             public void onClick(Button clicked, float mx, float my) {Start();}
+=======
+ 
+        start_button = new SimpleButton(new Rectangle(810, 350, 150, 50), resources.start_up, resources.start_down);
+        start_button.addListener(new ClickListener() {
+            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.START);}
+>>>>>>> e82a9d0d90e025a7a6ba477f7e7e6d0b971ae90a
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         listener.add(start_button);
+<<<<<<< HEAD
         
         refresh_button = new SimpleButton(new Rectangle(50, 110, 150, 50), resources.refresh_up, resources.refresh_down);
         refresh_button.addListener(new ClickListener() {
@@ -189,23 +176,25 @@ public class BJGame extends BasicGame {
         });
         listener.add(refresh_button);
         
+=======
+>>>>>>> e82a9d0d90e025a7a6ba477f7e7e6d0b971ae90a
     }
     
-    public void Hit() {
-//    	if (casino.isGame) {
-    		// TODO: Sent hit
-    		System.out.println("Sending Hit");
-    		casino.isGame = false;
-//    	}
+    public void ButtonAction(Request.Type type) {
+    	if (casino.isGame) {
+    		try {
+				sendReqest(type);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		System.out.println("Sending request");
+    	}
     }
-    
-    public void Stand() {
-//    	if (casino.isGame) {
-    		// TODO: Sent hit
-    		System.out.println("Sending Stand");
-    		casino.isGame = false;
-//    	}
-    }
+<<<<<<< HEAD
     
     public void Start() {
 //    	if (casino.isGame) {
@@ -223,6 +212,8 @@ public class BJGame extends BasicGame {
 //    	}
     }
     
+=======
+>>>>>>> e82a9d0d90e025a7a6ba477f7e7e6d0b971ae90a
     @Override
     public void update(GameContainer container, int delta) throws SlickException {
         hit_button.update(container, delta);
@@ -232,15 +223,10 @@ public class BJGame extends BasicGame {
     }
     
     public void render(GameContainer container, Graphics g) throws SlickException {
-//    	try {
-//			receiveCards();
-//		} catch (ClassNotFoundException | IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
     	resources.desk.draw();
-    	cdr.DrawCasino(casino);
-    	
+    	receiveCards();
+    	cdr.DrawCasino(casino, id);
+   
     //	if (casino.isGame) {
     		hit_button.render(container, g);
     		stand_button.render(container, g);
