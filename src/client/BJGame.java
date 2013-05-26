@@ -35,9 +35,6 @@ public class BJGame extends BasicGame {
 	public SimpleButton start_button;
 	public SimpleButton refresh_button;
 
-	
-	public SimpleButton start_button;
-	public SimpleButton refresh_button;
 
 	public static Resources resources;
     private StickyListener listener;
@@ -150,34 +147,21 @@ public class BJGame extends BasicGame {
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         listener.add(stand_button);
-<<<<<<< HEAD
-
-        
-        start_button = new SimpleButton(new Rectangle(50, 50, 150, 50), resources.start_up, resources.start_down);
-        start_button.addListener(new ClickListener() {
-            public void onClick(Button clicked, float mx, float my) {Start();}
-=======
- 
         start_button = new SimpleButton(new Rectangle(810, 350, 150, 50), resources.start_up, resources.start_down);
         start_button.addListener(new ClickListener() {
             public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.START);}
->>>>>>> e82a9d0d90e025a7a6ba477f7e7e6d0b971ae90a
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         listener.add(start_button);
-<<<<<<< HEAD
         
         refresh_button = new SimpleButton(new Rectangle(50, 110, 150, 50), resources.refresh_up, resources.refresh_down);
         refresh_button.addListener(new ClickListener() {
-            public void onClick(Button clicked, float mx, float my) {Refresh();}
+            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.REFRESH);}
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         listener.add(refresh_button);
-        
-=======
->>>>>>> e82a9d0d90e025a7a6ba477f7e7e6d0b971ae90a
     }
     
     public void ButtonAction(Request.Type type) {
@@ -194,26 +178,7 @@ public class BJGame extends BasicGame {
     		System.out.println("Sending request");
     	}
     }
-<<<<<<< HEAD
     
-    public void Start() {
-//    	if (casino.isGame) {
-    		// TODO: Sent hit
-    		System.out.println("Sending Start");
-    		casino.isGame = false;
-//    	}
-    }
-    
-    public void Refresh() {
-//    	if (casino.isGame) {
-    		// TODO: Sent hit
-    		System.out.println("Sending Refresh");
-    		casino.isGame = false;
-//    	}
-    }
-    
-=======
->>>>>>> e82a9d0d90e025a7a6ba477f7e7e6d0b971ae90a
     @Override
     public void update(GameContainer container, int delta) throws SlickException {
         hit_button.update(container, delta);
