@@ -4,13 +4,15 @@
 package base;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 
 /**
  *  Hand is a collection of cards.
  */
-public class Hand {
+public class Hand implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private static final int BLACKJACK = 21;
     
     /**

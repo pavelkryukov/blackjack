@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
@@ -23,9 +24,9 @@ import com.aem.sticky.button.SimpleButton;
 import com.aem.sticky.button.events.ClickListener;
 
 public class BJGame extends BasicGame {
-
-	public static String id;
-	public static String ip;
+	private static String id;
+	private static String ip;
+	private int counter = 0;
 	
 	public static CasinoPublic casino;
 	public CasinoDrawer cdr;
@@ -38,7 +39,8 @@ public class BJGame extends BasicGame {
 
 	public static Resources resources;
     private StickyListener listener;
-        
+	private static ServerSocket server;
+
     public BJGame() {
 		super("BJ Game");
 	}
@@ -55,7 +57,9 @@ public class BJGame extends BasicGame {
                 System.out.println("Wrong number of parametrs");
                 return;
         	}
-        	
+
+        	server = new ServerSocket(7500);
+			server.setSoTimeout(1000);
 
         	System.out.println("Welcome, " + id + " !");
             
@@ -92,7 +96,7 @@ public class BJGame extends BasicGame {
 		System.out.println("Receiver Start");
 
 		try {
-			Socket socket = new Socket(InetAddress.getByName(ip), 7300);
+			Socket socket = server.accept();
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             try {
                 Object object = (CasinoPublic) in.readObject();
@@ -186,7 +190,7 @@ public class BJGame extends BasicGame {
     }
     
     public void ButtonAction(Request.Type type) {
-    	if (casino.isGame) {
+    //	if (casino.isGame) {
     		try {
 				sendReqest(type);
 			} catch (IOException e) {
@@ -197,7 +201,7 @@ public class BJGame extends BasicGame {
 				e.printStackTrace();
 			}
     		System.out.println("Sending request");
-    	}
+    //	}
     }
 
 
@@ -205,11 +209,17 @@ public class BJGame extends BasicGame {
     public void update(GameContainer container, int delta) throws SlickException {
         hit_button.update(container, delta);
         stand_button.update(container, delta);
+	    start_button.update(container, delta);
+		refresh_button.update(container, delta);
     }
     
     public void render(GameContainer container, Graphics g) throws SlickException {
     	resources.desk.draw();
-    	receiveCards();
+    	counter++;
+    	if (counter == 100) {
+    		receiveCards();
+    		counter = 0;
+    	}
     	cdr.DrawCasino(casino, id);
    
     //	if (casino.isGame) {

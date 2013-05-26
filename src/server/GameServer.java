@@ -57,8 +57,9 @@ public class GameServer {
 
 	private void Run()
 	{
-		while (true) {
+
 			ReadCommands(); // Read commands from socket
+			while (true) {
 			DoCommands();   // Perform actions on Casino
 			SendCards();    // Send changed state to clients
 		}
@@ -69,21 +70,19 @@ public class GameServer {
 	 */
 	private void SendCards() {
 		for (InetAddress address : addresses) {
-			for (int i = 0; i < 5; ++i) {
-			try {
-				Socket clientSocket = new Socket(address, 7100);
-				ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-				objectOutput.writeObject((CasinoPublic)casino);
-				clientSocket.close();
-            	System.out.println("Cards have been sended to " + address.toString());				
-				break;
-			} catch (IOException e) {
-				// Connection failed, delete this address from set
-            	System.out.println("Invalid IP " + address.toString());	
-            //	if (i == 4)
-            //		addresses.remove(address);
+			while (true) {
+				try {
+					Socket clientSocket = new Socket(address, 7500);
+					ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+					objectOutput.writeObject(new CasinoPublic(casino));
+					clientSocket.close();
+					break;
+				} catch (IOException e) {
+					// Connection failed, delete this address from set
+		        	System.out.println("Invalid IP " + address.toString());
+		        	e.printStackTrace();
+				}
 			}
-		}
 		}
 	}
 
