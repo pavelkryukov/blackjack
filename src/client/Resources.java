@@ -23,8 +23,7 @@ public class Resources {
 	img_king_of_diamonds, img_king_of_hearts, img_king_of_spades,
 	img_queen_of_clubs, img_queen_of_diamonds, img_queen_of_hearts,
 	img_queen_of_spades, 
-	desk,
-	hit_up,	hit_down, stand_up, stand_down, start_up, start_down, refresh_up, refresh_down;
+	desk, hit_up,	hit_down, stand_up, stand_down, start_up, start_down, refresh_up, refresh_down;
 	public Sound click;
 	
 	public void load() throws SlickException {

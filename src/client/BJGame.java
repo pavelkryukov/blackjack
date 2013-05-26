@@ -97,6 +97,7 @@ public class BJGame extends BasicGame {
             try {
                 Object object = (CasinoPublic) in.readObject();
                 CasinoPublic tmp = (CasinoPublic) object;
+                casino = tmp;
                 casino = new CasinoPublic(tmp);
             } catch (ClassNotFoundException e) {
             	System.out.println("Incorrect request is received");
@@ -185,6 +186,7 @@ public class BJGame extends BasicGame {
     }
     
     public void ButtonAction(Request.Type type) {
+    	if (casino.isGame) {
     		try {
 				sendReqest(type);
 			} catch (IOException e) {
@@ -195,7 +197,9 @@ public class BJGame extends BasicGame {
 				e.printStackTrace();
 			}
     		System.out.println("Sending request");
+    	}
     }
+
 
     @Override
     public void update(GameContainer container, int delta) throws SlickException {
@@ -213,6 +217,7 @@ public class BJGame extends BasicGame {
     		hit_button.render(container, g);
     		stand_button.render(container, g);
     		refresh_button.render(container, g);
+
     //	}
     }
 }
