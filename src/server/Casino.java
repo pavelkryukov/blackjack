@@ -24,12 +24,39 @@ public class Casino extends CasinoPublic {
 		this.deck = new Deck();
 	}
 
-	/**
-	 * Finds and drops losers from the current game
-	 */
-	private void DropLosers() {
+	private void DropEverybody() {
 		for (Entry<String, Player> entry : players.entrySet()) {
-			entry.getValue().UpdateIfLost();
+			entry.getValue().LoseGame();
+		}
+	}
+	
+	private void ProcessGamers() {
+		Player bestPlayer = null;
+		Boolean isEverybodyStands = true;
+		int bestScore = 0;
+		for (Entry<String, Player> entry : players.entrySet()) {
+			final Player player = entry.getValue();
+			if (player.hasLost()) {
+				player.LoseGame();
+			}
+			else if (entry.getValue().hasWin()) {
+				player.LoseGame();
+				player.IncrementVictories();
+				DropEverybody();
+				break;
+			}
+			else if (!entry.getValue().IsInGame()) {
+				if (player.GetScore() > bestScore) {
+					bestScore = player.GetScore();
+					bestPlayer = player;
+				}
+			}
+			else {
+				isEverybodyStands = false;
+			}
+		}
+		if (isEverybodyStands && bestPlayer != null) {
+			bestPlayer.IncrementVictories();
 		}
 	}
 
@@ -117,10 +144,7 @@ public class Casino extends CasinoPublic {
 	 */
 	private void UpdateState() {
 		if ( isGame) {
-			/**
-			 * Find and drop losers
-			 */
-			DropLosers();
+			ProcessGamers();
 			if (GameIsOver()) {
 				isGame = false;
 			}

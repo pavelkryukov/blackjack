@@ -20,9 +20,10 @@ public class PlayerDrawer {
 	
 	public void drawPlayer(Player player, int x, int y, int width) {
 		hdr_.DrawHand(player.hand, x, y, width);
+		int victories = player.GetVictoriesNum();
 		ttf.drawString(x + width/2 - ttf.getWidth(player.getName()) / 2,
 				       y + 160,
-				       player.getName(), Color.white );
+				       player.getName() + " (" + victories + ")", Color.white );
 		int score = player.hand.score();
 		Color score_color;
 		if ( score > 21 )

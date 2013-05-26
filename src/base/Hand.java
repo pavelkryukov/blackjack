@@ -111,5 +111,9 @@ public class Hand implements Serializable {
     	return this.score() > BLACKJACK;
     }
     
+    public Boolean hasWin() {
+    	return this.score() == BLACKJACK;
+    }
+    
     public ArrayList<Card> cards;
 }

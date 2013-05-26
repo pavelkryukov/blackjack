@@ -8,6 +8,7 @@ public class Player implements Serializable {
 	private Boolean isInGame;
 	private Boolean isReady;
 	private String name;
+	private int victoryNum;
 
 	public class InvalidRequestException extends Exception {
 		private static final long serialVersionUID = 1L;	
@@ -17,6 +18,7 @@ public class Player implements Serializable {
 		this.hand = new Hand();
 		this.isInGame = false;
 		this.isReady = false;
+		this.victoryNum = 0;
 		this.setName(name);
 	}
 	
@@ -24,10 +26,11 @@ public class Player implements Serializable {
 		this.hand = new Hand(src.hand);
 		this.isInGame = src.isInGame;
 		this.isReady = src.isReady;
+		this.victoryNum = src.victoryNum;
 		this.name = src.name;
 	}
 	
-	private void LoseGame() {
+	public void LoseGame() {
 		isInGame = false;
 		isReady  = false;
 	}
@@ -62,16 +65,31 @@ public class Player implements Serializable {
 		hand.clear();
 	}
 	
-	public void UpdateIfLost() {
-		if (hand.hasLost())
-			LoseGame();
+	public Boolean hasLost() {
+		return hand.hasLost();
 	}
 
+	public Boolean hasWin() {
+		return hand.hasWin();
+	}
+
+	public int GetScore() {
+		return hand.score();
+	}
+	
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void IncrementVictories() {
+		victoryNum++;
+	}
+	
+	public int GetVictoriesNum() {
+		return victoryNum;
 	}
 }
