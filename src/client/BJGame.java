@@ -97,7 +97,7 @@ public class BJGame extends BasicGame {
             try {
                 Object object = (CasinoPublic) in.readObject();
                 CasinoPublic tmp = (CasinoPublic) object;
-                casino = tmp;
+                casino = new CasinoPublic(tmp);
             } catch (ClassNotFoundException e) {
             	System.out.println("Incorrect request is received");
             }
@@ -120,6 +120,33 @@ public class BJGame extends BasicGame {
 
     	cdr = new CasinoDrawer(resources);
     	casino = new CasinoPublic();
+    	
+        Player player1 = new Player("Vasya");
+        Player player2 = new Player("Luba");
+        Player player3 = new Player("Vachik");
+        Player player4 = new Player("Kryukov Pavel I");
+
+        for(int i = 0; i < 4; i++) {
+            player1.GetCard(Card.GetRandomCard());
+            player2.GetCard(Card.GetRandomCard());
+    }
+    
+    for(int i = 0; i < 4; i++) {
+            player2.GetCard(Card.GetRandomCard());
+    }
+    
+            player3.GetCard(Card.GetRandomCard());
+            player4.GetCard(Card.GetRandomCard());
+            player4.GetCard(Card.GetRandomCard());
+            player2.GetCard(Card.GetRandomCard());
+            player2.GetCard(Card.GetRandomCard());
+            
+
+
+    casino.players.put(player1.getName(), player1);
+    casino.players.put(player2.getName(), player2);
+    casino.players.put(player3.getName(), player3);
+    casino.players.put(player4.getName(), player4);
 
         listener = new StickyListener();
         container.getInput().addListener(listener);
@@ -158,7 +185,6 @@ public class BJGame extends BasicGame {
     }
     
     public void ButtonAction(Request.Type type) {
-    	if (casino.isGame) {
     		try {
 				sendReqest(type);
 			} catch (IOException e) {
@@ -169,8 +195,8 @@ public class BJGame extends BasicGame {
 				e.printStackTrace();
 			}
     		System.out.println("Sending request");
-    	}
     }
+
     @Override
     public void update(GameContainer container, int delta) throws SlickException {
         hit_button.update(container, delta);
@@ -183,8 +209,10 @@ public class BJGame extends BasicGame {
     	cdr.DrawCasino(casino, id);
    
     //	if (casino.isGame) {
+    	    start_button.render(container, g);
     		hit_button.render(container, g);
     		stand_button.render(container, g);
+    		refresh_button.render(container, g);
     //	}
     }
 }

@@ -75,6 +75,7 @@ public class GameServer {
 				ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
 				objectOutput.writeObject((CasinoPublic)casino);
 				clientSocket.close();
+            	System.out.println("Cards have been sended to " + address.toString());				
 				break;
 			} catch (IOException e) {
 				// Connection failed, delete this address from set

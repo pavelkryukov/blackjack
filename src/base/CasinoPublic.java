@@ -13,4 +13,8 @@ public class CasinoPublic implements Serializable {
 		this.players = new HashMap<String, Player>();
 		this.isGame = false;
 	}
+	public CasinoPublic(CasinoPublic src) {
+		this.players = new HashMap<String, Player>(src.players);
+		this.isGame = src.isGame;
+	}
 }
