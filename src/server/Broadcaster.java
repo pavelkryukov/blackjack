@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,23 +23,28 @@ public class Broadcaster extends Thread {
 
 	public void run() {
 		while (true) {
-			CasinoPublic casino;
-			synchronized (gs.GetCasinoPublic()) {
-				casino = new CasinoPublic(gs.GetCasinoPublic());
-			}
-			for (InetAddress address : addresses) {
-				try {
-					Socket clientSocket = new Socket(address, 7500);
-					ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-					objectOutput.writeObject(casino);
-					clientSocket.close();
-				//	System.out.println("Card sended");
-				} catch (IOException e) {
-					// Connection failed, delete this address from set
-			//		System.out.println("Card not sended");
-		    //    	System.out.println("Invalid IP " + address.toString());
-		    //    	e.printStackTrace();
+			try {
+				CasinoPublic casino;
+				synchronized (gs.GetCasinoPublic()) {
+					casino = new CasinoPublic(gs.GetCasinoPublic());
 				}
+				for (InetAddress address : addresses) {
+					try {
+						Socket clientSocket = new Socket(address, 7500);
+						ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+						objectOutput.writeObject(casino);
+						clientSocket.close();
+					//	System.out.println("Card sended");
+					} catch (IOException e) {
+						// Connection failed, delete this address from set
+				//		System.out.println("Card not sended");
+			    //    	System.out.println("Invalid IP " + address.toString());
+			    //    	e.printStackTrace();
+					}
+				}
+			}
+			catch (ConcurrentModificationException e) {
+				System.out.println("Concurrent modification exception caught, fix me!");
 			}
 		}
 	}
