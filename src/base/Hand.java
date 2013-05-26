@@ -104,5 +104,5 @@ public class Hand {
     	return this.score() > 21;
     }
     
-    private ArrayList<Card> cards;
+    public ArrayList<Card> cards;
 }
