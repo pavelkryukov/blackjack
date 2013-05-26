@@ -22,7 +22,10 @@ public class Broadcaster extends Thread {
 
 	public void run() {
 		while (true) {
-			CasinoPublic casino = gs.GetCasinoPublic();
+			CasinoPublic casino;
+			synchronized (gs.GetCasinoPublic()) {
+				casino = new CasinoPublic(gs.GetCasinoPublic());
+			}
 			for (InetAddress address : addresses) {
 				try {
 					Socket clientSocket = new Socket(address, 7500);

@@ -58,6 +58,10 @@ public class Player implements Serializable {
 		hand.addCard(card);
 	}
 	
+	public void DropCards() {
+		hand.clear();
+	}
+	
 	public void UpdateIfLost() {
 		if (hand.hasLost())
 			LoseGame();

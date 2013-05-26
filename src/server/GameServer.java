@@ -95,7 +95,9 @@ public class GameServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.casinoPublic = new CasinoPublic(casino);
+		synchronized (this.casinoPublic) {
+			this.casinoPublic = new CasinoPublic(casino);
+		}
 	}
 
 	/**

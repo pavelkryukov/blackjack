@@ -55,6 +55,7 @@ public class Casino extends CasinoPublic {
 		System.out.println("Game started!");
 		for (Entry<String, Player> entry : players.entrySet()) {
 			entry.getValue().SetInGame();
+			entry.getValue().DropCards();
 			// Give two cards to everybody
 			entry.getValue().GetCard(deck.GetCard());
 			entry.getValue().GetCard(deck.GetCard());
