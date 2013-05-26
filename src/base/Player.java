@@ -1,18 +1,20 @@
 package base;
 
 public class Player {
-	private Hand hand;
+	public Hand hand;
 	private Boolean isInGame;
 	private Boolean isReady;
+	private String name;
 
 	public class InvalidRequestException extends Exception {
 		private static final long serialVersionUID = 1L;	
 	}
 
-	public Player() {
+	public Player( String name) {
 		this.hand = new Hand();
 		this.isInGame = false;
 		this.isReady = false;
+		this.setName(name);
 	}
 
 	private void LoseGame() {
@@ -47,5 +49,13 @@ public class Player {
 	public void UpdateIfLost() {
 		if (hand.hasLost())
 			LoseGame();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

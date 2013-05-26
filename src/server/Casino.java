@@ -49,7 +49,7 @@ public class Casino extends CasinoPublic {
 				System.out.println("Player " + id + " is already in Casino");
 			}
 			else {
-				players.put(id, new Player());
+				players.put(id, new Player(id));
 				System.out.println("Player " + id + " joined Casino");
 			}
 		}
