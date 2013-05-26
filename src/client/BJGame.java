@@ -171,19 +171,19 @@ public class BJGame extends BasicGame {
     }
     
     public void Hit() {
-    	if (casino.isGame) {
+//    	if (casino.isGame) {
     		// TODO: Sent hit
     		System.out.println("Sending Hit");
     		casino.isGame = false;
-    	}
+//    	}
     }
     
     public void Stand() {
-    	if (casino.isGame) {
+//    	if (casino.isGame) {
     		// TODO: Sent hit
     		System.out.println("Sending Stand");
     		casino.isGame = false;
-    	}
+//    	}
     }
     
     @Override
@@ -193,18 +193,18 @@ public class BJGame extends BasicGame {
     }
     
     public void render(GameContainer container, Graphics g) throws SlickException {
-    	try {
-			receiveCards();
-		} catch (ClassNotFoundException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//    	try {
+//			receiveCards();
+//		} catch (ClassNotFoundException | IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
     	resources.desk.draw();
     	cdr.DrawCasino(casino);
     	
-    	if (casino.isGame) {
+    //	if (casino.isGame) {
     		hit_button.render(container, g);
     		stand_button.render(container, g);
-    	}
+    //	}
     }
 }
