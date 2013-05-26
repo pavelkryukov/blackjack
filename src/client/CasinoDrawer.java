@@ -26,7 +26,7 @@ public class CasinoDrawer {
 		int offset = 0;
 		Player me = null;
         for (Player player: casino.players.values()) {
-        	if (player.getName() == myName) {
+        	if (player.getName().equalsIgnoreCase(myName)) {
         		me = player;
         	}
         	else {

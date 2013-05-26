@@ -19,7 +19,14 @@ public class Player implements Serializable {
 		this.isReady = false;
 		this.setName(name);
 	}
-
+	
+	public Player( Player src) {
+		this.hand = new Hand(src.hand);
+		this.isInGame = src.isInGame;
+		this.isReady = src.isReady;
+		this.name = src.name;
+	}
+	
 	private void LoseGame() {
 		isInGame = false;
 		isReady  = false;

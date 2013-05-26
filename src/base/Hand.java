@@ -21,6 +21,10 @@ public class Hand implements Serializable {
     public Hand() {
         cards = new ArrayList<Card>();
     }
+    
+    public Hand(Hand src) {
+    	cards = new ArrayList<Card>(src.cards);
+    }
 
     /**
      * Create hand with two initial cards. Usual case.

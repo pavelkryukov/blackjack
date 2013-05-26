@@ -5,15 +5,11 @@ package server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Set;
 
 import base.CasinoPublic;
 import base.Request;
@@ -23,16 +19,17 @@ public class GameServer {
 	 *  Queue of incoming requests
 	 */
 	private Queue<Request> requests;
-	
-	/**
-	 * Storage of IP addresses of request senders
-	 */
-	private Set<InetAddress> addresses;
+
+	private Broadcaster broadcaster;
 	
 	/**
 	 * Casino state
 	 */
 	private Casino casino;
+	private CasinoPublic casinoPublic;
+	public CasinoPublic GetCasinoPublic() {
+		return casinoPublic;
+	}
 	
 	/**
 	 * Reading socket
@@ -43,8 +40,10 @@ public class GameServer {
 	{
 		// Initialize game situation
 		this.casino = new Casino();
+		this.casinoPublic = new CasinoPublic(casino);
 		this.requests = new LinkedList<Request>();
-		this.addresses = new HashSet<InetAddress>();
+		this.broadcaster = new Broadcaster(this);
+		broadcaster.start();
 
 		// Initialize socket
 		try {
@@ -57,32 +56,9 @@ public class GameServer {
 
 	private void Run()
 	{
-
+		while (true) {
 			ReadCommands(); // Read commands from socket
-			while (true) {
 			DoCommands();   // Perform actions on Casino
-			SendCards();    // Send changed state to clients
-		}
-	}
-
-	/**
-	 * Sends game state through TCP/IP
-	 */
-	private void SendCards() {
-		for (InetAddress address : addresses) {
-			while (true) {
-				try {
-					Socket clientSocket = new Socket(address, 7500);
-					ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-					objectOutput.writeObject(new CasinoPublic(casino));
-					clientSocket.close();
-					break;
-				} catch (IOException e) {
-					// Connection failed, delete this address from set
-		        	System.out.println("Invalid IP " + address.toString());
-		        	e.printStackTrace();
-				}
-			}
 		}
 	}
 
@@ -101,7 +77,7 @@ public class GameServer {
 	private void ReadCommands() {
 		try {                
 			Socket clientConn = serverSocket.accept();
-			addresses.add(clientConn.getInetAddress());
+			broadcaster.AddAddress(clientConn.getInetAddress());
 			ObjectInputStream objectInput = new ObjectInputStream(clientConn.getInputStream());
             try {
                 Object object = (Request) objectInput.readObject();
@@ -118,6 +94,7 @@ public class GameServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		this.casinoPublic = new CasinoPublic(casino);
 	}
 
 	/**

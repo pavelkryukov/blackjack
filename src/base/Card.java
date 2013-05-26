@@ -3,11 +3,14 @@
  */
 package base;
 
+import java.io.Serializable;
+
 /**
  *  Playing card
  */
-public class Card {
-    public enum Rank  { TWO, THREE, FOUR, FIVE, SIX, SEVEN,
+public class Card implements Serializable {
+	private static final long serialVersionUID = 1L;
+	public enum Rank  { TWO, THREE, FOUR, FIVE, SIX, SEVEN,
                         EIGHT, NINE, TEN, JACK, QUEEN, KING, ACE ;
     	public static Rank getRandom() {
     		return values()[(int) (Math.random() * values().length)];
@@ -23,6 +26,11 @@ public class Card {
     public Card(Rank rank, Suit suit) {
         this.rank = rank;
         this.suit = suit;
+    }
+    
+    public Card(Card src) {
+    	this.rank = src.rank;
+    	this.suit = src.suit;
     }
 
     final private Rank rank;
