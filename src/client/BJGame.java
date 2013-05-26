@@ -1,10 +1,13 @@
 package client;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.LinkedList;
+import java.nio.channels.SocketChannel;
 import java.util.Random;
 
 import org.newdawn.slick.AppGameContainer;
@@ -34,8 +37,7 @@ public class BJGame extends BasicGame {
 	
 	public static Resources resources;
     private StickyListener listener;
-
-    
+        
     public BJGame() {
 		super("BJ Game");
 	}
@@ -50,43 +52,67 @@ public class BJGame extends BasicGame {
         		id = arguments[1];
         	} else {
                 System.out.println("Wrong number of parametrs");
+                return;
         	}
-    		
-        	System.out.println("Welcome, " + id + " !");
-    		
-        	/*
-            while (true) {
-                try {
-                    InetAddress addr = InetAddress.getByName(ip);
-                    Socket s = new Socket(addr, 7000);
-                    ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
-                    out.writeObject(new Request(id, Request.Type.CONNECT));
-                    s.close();
-                    break;
-                } catch (ConnectException ce) {
-                   // wait for a while and repeat
-                   System.out.println("waiting for server to start...");
-                   Thread.sleep(1000);
-                   continue;
-                }
-            }
-            */
-            
-            
-
-            System.out.println("Request sent");
         	
-            AppGameContainer app = new AppGameContainer(new BJGame());
+        	System.out.println("Welcome, " + id + " !");
+            
+        	AppGameContainer app = new AppGameContainer(new BJGame());
             app.setDisplayMode(1280, 800, false);
             app.start();
+            System.out.println("Chao!");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
+	private void sendReqest(Request.Type req) throws IOException, InterruptedException {
+        System.out.println("Sending request...");
+		while (true) {
+            try {
+                InetAddress addr = InetAddress.getByName(ip);
+                Socket s = new Socket(addr, Settings.port);
+                ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+                out.writeObject(new Request(id, req));
+                s.close();
+                break;
+            } catch (ConnectException ce) {
+               // wait for a while and repeat
+               System.out.println("waiting for server to start...");
+               Thread.sleep(1000);
+               continue;
+            }
+		}
+        System.out.println("Request sent");
+	}
+        
+	private void receiveCards() throws IOException, ClassNotFoundException {
+		System.out.println("Receiver Start");
+
+    	SocketChannel sChannel = SocketChannel.open();
+    	sChannel.configureBlocking(true);
+    	if (sChannel.connect(new InetSocketAddress(ip, 7100))) {
+
+    		ObjectInputStream ois = 
+                     new ObjectInputStream(sChannel.socket().getInputStream());
+
+    		CasinoPublic cas_pub = (CasinoPublic)ois.readObject();
+    		System.out.println("Received Casino: '" + cas_pub.players.size() + "'");
+    	}
+
+    	System.out.println("End Receiver");
+	}
+	
     public void init(GameContainer container) throws SlickException {
     	resources = new Resources();
     	resources.load();
+    	
+		try {
+			sendReqest(Request.Type.CONNECT);
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}  
     	
     	Player player1 = new Player("Vasya");
     	Player player2 = new Player("Luba");
@@ -167,6 +193,12 @@ public class BJGame extends BasicGame {
     }
     
     public void render(GameContainer container, Graphics g) throws SlickException {
+    	try {
+			receiveCards();
+		} catch (ClassNotFoundException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	resources.desk.draw();
     	cdr.DrawCasino(casino);
     	
