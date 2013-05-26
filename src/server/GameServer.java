@@ -17,6 +17,7 @@ import java.util.Set;
 
 import base.CasinoPublic;
 import base.Request;
+import base.Settings;
 
 public class GameServer {
 	/**
@@ -48,7 +49,7 @@ public class GameServer {
 
 		// Initialize socket
 		try {
-			this.serverSocket = new ServerSocket(7000);
+			this.serverSocket = new ServerSocket(Settings.port);
 		} catch (IOException e) {
         	System.out.println("Error during server initialization");
 			e.printStackTrace();
