@@ -2,6 +2,7 @@ package client;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 
 public class Resources {
 	public Image img_10_of_clubs, img_10_of_diamonds, img_10_of_hearts,
@@ -21,7 +22,10 @@ public class Resources {
 	img_jack_of_hearts, img_jack_of_spades, img_king_of_clubs,
 	img_king_of_diamonds, img_king_of_hearts, img_king_of_spades,
 	img_queen_of_clubs, img_queen_of_diamonds, img_queen_of_hearts,
-	img_queen_of_spades, desk;
+	img_queen_of_spades, 
+	desk,
+	hit_up,	hit_down, stand_up, stand_down;
+	public Sound click;
 	
 	public void load() throws SlickException {
         img_10_of_clubs       = new Image("images/cards/10_of_clubs.png");
@@ -77,5 +81,9 @@ public class Resources {
         img_queen_of_hearts   = new Image("images/cards/queen_of_hearts.png");
         img_queen_of_spades   = new Image("images/cards/queen_of_spades.png");
         desk                  = new Image("images/background/desk.jpg");
+        hit_up                = new Image("images/buttons/hit_up.png");
+        hit_down              = new Image("images/buttons/hit_down.png");
+        stand_up              = new Image("images/buttons/stand_up.png");
+        stand_down            = new Image("images/buttons/stand_down.png");
 	}
 }
