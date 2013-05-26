@@ -34,6 +34,9 @@ public class BJGame extends BasicGame {
 	
 	public SimpleButton hit_button;
 	public SimpleButton stand_button;
+	public SimpleButton start_button;
+	public SimpleButton refresh_button;
+
 	
 	public static Resources resources;
     private StickyListener listener;
@@ -168,6 +171,24 @@ public class BJGame extends BasicGame {
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         listener.add(stand_button);
+
+        
+        start_button = new SimpleButton(new Rectangle(50, 50, 150, 50), resources.start_up, resources.start_down);
+        start_button.addListener(new ClickListener() {
+            public void onClick(Button clicked, float mx, float my) {Start();}
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
+        listener.add(start_button);
+        
+        refresh_button = new SimpleButton(new Rectangle(50, 110, 150, 50), resources.refresh_up, resources.refresh_down);
+        refresh_button.addListener(new ClickListener() {
+            public void onClick(Button clicked, float mx, float my) {Refresh();}
+            public void onDoubleClick(Button clicked, float mx, float my) {}
+            public void onRightClick(Button clicked, float mx, float my) {}
+        });
+        listener.add(refresh_button);
+        
     }
     
     public void Hit() {
@@ -186,10 +207,28 @@ public class BJGame extends BasicGame {
 //    	}
     }
     
+    public void Start() {
+//    	if (casino.isGame) {
+    		// TODO: Sent hit
+    		System.out.println("Sending Start");
+    		casino.isGame = false;
+//    	}
+    }
+    
+    public void Refresh() {
+//    	if (casino.isGame) {
+    		// TODO: Sent hit
+    		System.out.println("Sending Refresh");
+    		casino.isGame = false;
+//    	}
+    }
+    
     @Override
     public void update(GameContainer container, int delta) throws SlickException {
         hit_button.update(container, delta);
         stand_button.update(container, delta);
+        start_button.update(container, delta);
+        refresh_button.update(container, delta);
     }
     
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -205,6 +244,8 @@ public class BJGame extends BasicGame {
     //	if (casino.isGame) {
     		hit_button.render(container, g);
     		stand_button.render(container, g);
+    		start_button.render(container, g);
+    		refresh_button.render(container, g);
     //	}
     }
 }

@@ -24,7 +24,8 @@ public class Resources {
 	img_queen_of_clubs, img_queen_of_diamonds, img_queen_of_hearts,
 	img_queen_of_spades, 
 	desk,
-	hit_up,	hit_down, stand_up, stand_down;
+	hit_up,	hit_down, stand_up, stand_down,
+	start_up, start_down, refresh_up, refresh_down;
 	public Sound click;
 	
 	public void load() throws SlickException {
@@ -85,5 +86,9 @@ public class Resources {
         hit_down              = new Image("images/buttons/hit_down.png");
         stand_up              = new Image("images/buttons/stand_up.png");
         stand_down            = new Image("images/buttons/stand_down.png");
+        start_up                = new Image("images/buttons/start_up.png");
+        start_down              = new Image("images/buttons/start_down.png");
+        refresh_up              = new Image("images/buttons/refresh_up.png");
+        refresh_down            = new Image("images/buttons/refresh_down.png");
 	}
 }
