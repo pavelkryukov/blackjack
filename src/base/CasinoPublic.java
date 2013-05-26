@@ -10,12 +10,8 @@ public class CasinoPublic implements Serializable {
 	public HashMap<String, Player> players;
 	public Player dealer;
 	public Boolean isGame;
-	public Boolean isHitAllowed;
-	public Boolean isStandAllowed;
 	public CasinoPublic() {
 		this.players = new HashMap<String, Player>();
 		this.isGame = false;
-		this.isHitAllowed = false;
-		this.isStandAllowed = false;
 	}
 }

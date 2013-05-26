@@ -123,9 +123,7 @@ public class BJGame extends BasicGame {
     	casino.players.put(player4.getName(), player4);
     	casino.dealer = dealer;
     	
-    	casino.isHitAllowed = true;
-    	casino.isStandAllowed = true;
-    	
+    	casino.isGame = true;
         listener = new StickyListener();
         container.getInput().addListener(listener);
         
@@ -147,20 +145,18 @@ public class BJGame extends BasicGame {
     }
     
     public void Hit() {
-    	if (casino.isHitAllowed) {
+    	if (casino.isGame) {
     		// TODO: Sent hit
     		System.out.println("Sending Hit");
-    		casino.isStandAllowed = false;
-    		casino.isHitAllowed = false;
+    		casino.isGame = false;
     	}
     }
     
     public void Stand() {
-    	if (casino.isStandAllowed) {
+    	if (casino.isGame) {
     		// TODO: Sent hit
     		System.out.println("Sending Stand");
-    		casino.isStandAllowed = false;
-    		casino.isHitAllowed = false;
+    		casino.isGame = false;
     	}
     }
     
@@ -174,10 +170,9 @@ public class BJGame extends BasicGame {
     	resources.desk.draw();
     	cdr.DrawCasino(casino);
     	
-    	if (casino.isHitAllowed)
+    	if (casino.isGame) {
     		hit_button.render(container, g);
-    	
-    	if (casino.isStandAllowed)
     		stand_button.render(container, g);
+    	}
     }
 }
