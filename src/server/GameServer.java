@@ -1,3 +1,6 @@
+/**
+ * Copyright (c) 2013 Svyatoslav Kuzmich, Pavel Kryukov. All rights reserved.
+ */
 package server;
 
 import java.io.IOException;
@@ -16,9 +19,24 @@ import base.CasinoPublic;
 import base.Request;
 
 public class GameServer {
+	/**
+	 *  Queue of incoming requests
+	 */
 	private Queue<Request> requests;
+	
+	/**
+	 * Storage of IP addresses of request senders
+	 */
 	private Set<InetAddress> addresses;
+	
+	/**
+	 * Casino state
+	 */
 	private Casino casino;
+	
+	/**
+	 * Reading socket
+	 */
 	private ServerSocket serverSocket;
 
 	public GameServer()
@@ -40,12 +58,15 @@ public class GameServer {
 	private void Run()
 	{
 		while (true) {
-			ReadCommands();
-			DoCommands();
-			SendCards();
+			ReadCommands(); // Read commands from socket
+			DoCommands();   // Perform actions on Casino
+			SendCards();    // Send changed state to clients
 		}
 	}
 
+	/**
+	 * Sends game state through TCP/IP
+	 */
 	private void SendCards() {
 		for (InetAddress address : addresses) {
 			try {
@@ -54,19 +75,25 @@ public class GameServer {
 				objectOutput.writeObject((CasinoPublic)casino);
 				clientSocket.close();
 			} catch (IOException e) {
+				// Connection failed, delete this address from set
             	System.out.println("Invalid IP " + address.toString());	
             	addresses.remove(address);
 			}
-			
 		}
 	}
 
+	/**
+	 * Perform action on Casino
+	 */
 	private void DoCommands() {
 		while (!requests.isEmpty()) {
 			this.casino.ProcessRequest(requests.poll());
 		}
 	}
-
+	
+	/**
+	 * Read commands from clients
+	 */
 	private void ReadCommands() {
 		try {                
 			Socket clientConn = serverSocket.accept();
@@ -88,6 +115,10 @@ public class GameServer {
 		}
 	}
 
+	/**
+	 * Entry point
+	 * @param arguments ignored
+	 */
 	public static void main(String[] arguments) {
         try {
         	System.out.println("BlackJack Server v0.1");
@@ -97,5 +128,4 @@ public class GameServer {
             e.printStackTrace();
         }
     }
-
 }
