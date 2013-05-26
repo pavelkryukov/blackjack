@@ -78,6 +78,7 @@ public class GameServer {
 		try {                
 			Socket clientConn = serverSocket.accept();
 			broadcaster.AddAddress(clientConn.getInetAddress());
+			System.out.println("Request from..." + clientConn.getInetAddress().toString());
 			ObjectInputStream objectInput = new ObjectInputStream(clientConn.getInputStream());
             try {
                 Object object = (Request) objectInput.readObject();

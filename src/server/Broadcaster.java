@@ -29,10 +29,10 @@ public class Broadcaster extends Thread {
 					ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
 					objectOutput.writeObject(casino);
 					clientSocket.close();
-					System.out.println("Card sended");
+				//	System.out.println("Card sended");
 				} catch (IOException e) {
 					// Connection failed, delete this address from set
-					System.out.println("Card not sended");
+			//		System.out.println("Card not sended");
 		    //    	System.out.println("Invalid IP " + address.toString());
 		    //    	e.printStackTrace();
 				}

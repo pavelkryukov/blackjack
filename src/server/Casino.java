@@ -61,6 +61,14 @@ public class Casino extends CasinoPublic {
 		}
 		isGame = true;
 	}
+	
+	private Boolean GameIsOver() {
+		for (Entry<String, Player> entry : players.entrySet()) {
+			if (entry.getValue().IsInGame())
+				return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Process incoming request from client
@@ -112,6 +120,9 @@ public class Casino extends CasinoPublic {
 			 * Find and drop losers
 			 */
 			DropLosers();
+			if (GameIsOver()) {
+				isGame = false;
+			}
 		}
 		else {
 			/**

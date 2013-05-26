@@ -34,6 +34,6 @@ public class PlayerDrawer {
 		
 		ttf.drawString(x + width/2 - ttf.getWidth(Integer.toString(score)) / 2,
 			       y + 160 + ttf.getHeight(player.getName()) + 10,
-			       Integer.toString(score), score_color);
+			       Integer.toString(score) + (player.IsInGame() ? " [game]" : " [stand]"), score_color);
 	}
 }
