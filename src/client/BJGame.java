@@ -32,6 +32,7 @@ public class BJGame extends BasicGame {
 	
 	public SimpleButton hit_button;
 	public SimpleButton stand_button;
+	
 	public SimpleButton start_button;
 	public SimpleButton refresh_button;
 
@@ -54,6 +55,7 @@ public class BJGame extends BasicGame {
                 System.out.println("Wrong number of parametrs");
                 return;
         	}
+        	
 
         	System.out.println("Welcome, " + id + " !");
             
@@ -88,6 +90,7 @@ public class BJGame extends BasicGame {
         
 	private void receiveCards() {
 		System.out.println("Receiver Start");
+
 		try {
 			Socket socket = new Socket(InetAddress.getByName(ip), 7300);
 			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -117,6 +120,7 @@ public class BJGame extends BasicGame {
 
     	cdr = new CasinoDrawer(resources);
     	casino = new CasinoPublic();
+
         listener = new StickyListener();
         container.getInput().addListener(listener);
 
@@ -135,7 +139,7 @@ public class BJGame extends BasicGame {
             public void onRightClick(Button clicked, float mx, float my) {}
         });
         listener.add(hit_button);
- 
+
         stand_button = new SimpleButton(new Rectangle(650, 350, 150, 50), resources.stand_up, resources.stand_down);
         stand_button.addListener(new ClickListener() {
             public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.RESIGN);}
@@ -167,7 +171,6 @@ public class BJGame extends BasicGame {
     		System.out.println("Sending request");
     	}
     }
-        
     @Override
     public void update(GameContainer container, int delta) throws SlickException {
         hit_button.update(container, delta);
@@ -179,9 +182,9 @@ public class BJGame extends BasicGame {
     	receiveCards();
     	cdr.DrawCasino(casino, id);
    
-    	if (casino.isGame) {
+    //	if (casino.isGame) {
     		hit_button.render(container, g);
     		stand_button.render(container, g);
-    	}
+    //	}
     }
 }
