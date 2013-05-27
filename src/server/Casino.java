@@ -118,6 +118,7 @@ public class Casino extends CasinoPublic {
 			System.out.println("There is no player " + id + " in current game");
 		}
 		else if (req.IsDisconnect()) {
+			System.out.println("Player " + id + " disconnected");
 			players.remove(id);
 		}
 		else if (req.IsGive()) {

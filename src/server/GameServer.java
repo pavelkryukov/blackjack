@@ -3,8 +3,10 @@
  */
 package server;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -26,9 +28,9 @@ public class GameServer {
 	 * Casino state
 	 */
 	private Casino casino;
-	private CasinoPublic casinoPublic;
-	public CasinoPublic GetCasinoPublic() {
-		return casinoPublic;
+	private ByteArrayOutputStream casinoO;
+	public ByteArrayOutputStream GetCasinoPublic() {
+		return casinoO;
 	}
 	
 	/**
@@ -40,7 +42,8 @@ public class GameServer {
 	{
 		// Initialize game situation
 		this.casino = new Casino();
-		this.casinoPublic = new CasinoPublic(casino);
+		this.casinoO = new ByteArrayOutputStream();
+		this.UpdateCasinoPublic();
 		this.requests = new LinkedList<Request>();
 		this.broadcaster = new Broadcaster(this);
 		broadcaster.start();
@@ -71,6 +74,20 @@ public class GameServer {
 		}
 	}
 	
+	private void UpdateCasinoPublic() {
+		synchronized (this.casinoO) {
+			this.casinoO.reset();
+			try {
+				ObjectOutputStream oos = new ObjectOutputStream(this.casinoO);
+				oos.writeObject(new CasinoPublic(casino));
+				oos.close();
+			} catch (IOException e) {
+				System.out.println("Error during copy of casino to byte array");
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	/**
 	 * Read commands from clients
 	 */
@@ -95,9 +112,7 @@ public class GameServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		synchronized (this.casinoPublic) {
-			this.casinoPublic = new CasinoPublic(casino);
-		}
+		UpdateCasinoPublic();
 	}
 
 	/**

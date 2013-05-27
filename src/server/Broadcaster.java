@@ -1,10 +1,11 @@
 package server;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,30 +24,35 @@ public class Broadcaster extends Thread {
 
 	public void run() {
 		while (true) {
-			try {
-				CasinoPublic casino;
-				synchronized (gs.GetCasinoPublic()) {
-					casino = new CasinoPublic(gs.GetCasinoPublic());
-				}
-				for (InetAddress address : addresses) {
-					try {
-						Socket clientSocket = new Socket(address, 7500);
-						ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
-						objectOutput.writeObject(casino);
-						clientSocket.close();
-					//	System.out.println("Card sended");
-					} catch (IOException e) {
-						// Connection failed, delete this address from set
-				//		System.out.println("Card not sended");
-			    //    	System.out.println("Invalid IP " + address.toString());
-			    //    	e.printStackTrace();
-					}
+			CasinoPublic casino = null;
+			synchronized (gs.GetCasinoPublic()) {
+				ByteArrayInputStream bais = new ByteArrayInputStream(gs.GetCasinoPublic().toByteArray());
+				try {
+					ObjectInputStream ois = new ObjectInputStream(bais);
+					casino = new CasinoPublic((CasinoPublic)ois.readObject());
+				} catch (ClassNotFoundException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-			catch (ConcurrentModificationException e) {
-				System.out.println("Concurrent modification exception caught, fix me!");
+			if (casino == null)
+				continue;
+			for (InetAddress address : addresses) {
+				try {
+					Socket clientSocket = new Socket(address, port);
+					ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
+					objectOutput.writeObject(casino);
+					clientSocket.close();
+				//	System.out.println("Card sended");
+				} catch (IOException e) {
+					// Connection failed, delete this address from set
+			//		System.out.println("Card not sended");
+		    //    	System.out.println("Invalid IP " + address.toString());
+		    //    	e.printStackTrace();
+				}
 			}
 		}
 	}
 }
+
 
