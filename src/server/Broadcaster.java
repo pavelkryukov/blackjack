@@ -39,7 +39,7 @@ public class Broadcaster extends Thread {
 				continue;
 			for (InetAddress address : addresses) {
 				try {
-					Socket clientSocket = new Socket(address, port);
+					Socket clientSocket = new Socket(address, 7500);
 					ObjectOutputStream objectOutput = new ObjectOutputStream(clientSocket.getOutputStream());
 					objectOutput.writeObject(casino);
 					clientSocket.close();
