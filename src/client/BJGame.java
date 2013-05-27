@@ -1,11 +1,9 @@
 package client;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
@@ -38,17 +36,22 @@ public class BJGame extends BasicGame {
 
 	public static Resources resources;
     private StickyListener listener;
-	private static ServerSocket server;
 
     public BJGame() {
 		super("BJ Game");
 	}
+ 
+    public static void SetCasino(CasinoPublic value) {
+    	synchronized (casino) {
+    		casino = new CasinoPublic(value);
+    	}
+    }
 
 	public static void main(String[] arguments) {
         try {
         	if (arguments.length == 0) {
-        		id = "player" + Integer.toString((new Random()).nextInt(100000));
         		ip = "127.0.0.1";
+        		id = "player" + Integer.toString((new Random()).nextInt(100000));
         	} else if (arguments.length == 2) {
         		ip = arguments[0];
         		id = arguments[1];
@@ -57,15 +60,14 @@ public class BJGame extends BasicGame {
                 return;
         	}
 
-        	server = new ServerSocket(7500);
-			server.setSoTimeout(1000);
-
         	System.out.println("Welcome, " + id + " !");
-            
+
+        	Receiver recv = new Receiver();
+        	recv.start();
         	AppGameContainer app = new AppGameContainer(new BJGame());
             app.setDisplayMode(1280, 800, false);
             app.start();
-            System.out.println("Chao!");
+            System.out.println("Ciao!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,23 +93,6 @@ public class BJGame extends BasicGame {
         System.out.println("Request sent");
 	}
         
-	private void receiveCards() {
-		try {
-			Socket socket = server.accept();
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            try {
-                Object object = (CasinoPublic) in.readObject();
-                CasinoPublic tmp = (CasinoPublic) object;
-                casino = new CasinoPublic(tmp);
-            } catch (ClassNotFoundException e) {
-            	System.out.println("Incorrect request is received");
-            }
-            socket.close();
-		} catch (Exception e) {
-            
-		}
-	}
-
     public void init(GameContainer container) throws SlickException {
     	resources = new Resources();
     	resources.load();
@@ -181,9 +166,10 @@ public class BJGame extends BasicGame {
     
     public void render(GameContainer container, Graphics g) throws SlickException {
     	resources.desk.draw();
-    	receiveCards();
-    	cdr.DrawCasino(casino, id);
- 
+    	synchronized(casino) {
+    		cdr.DrawCasino(casino, id);
+    	}
+
    	    start_button.render(container, g);
    		hit_button.render(container, g);
    		stand_button.render(container, g);
