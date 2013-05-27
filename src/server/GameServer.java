@@ -62,6 +62,7 @@ public class GameServer {
 		while (true) {
 			ReadCommands(); // Read commands from socket
 			DoCommands();   // Perform actions on Casino
+			UpdateCasinoPublic();
 		}
 	}
 
@@ -112,7 +113,6 @@ public class GameServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		UpdateCasinoPublic();
 	}
 
 	/**
