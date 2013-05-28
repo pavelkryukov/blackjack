@@ -83,7 +83,7 @@ public class HandTest {
         hand.addCard(new Card(ACE, Suit.HEARTS));
         assertEquals(hand.score(), 21);
     }
-    
+    /*
     @Test
     public void test6() {
         Hand hand = new Hand( new Card(QUEEN, Suit.DIAMONDS),
@@ -113,5 +113,5 @@ public class HandTest {
         hand.addCard(new Card(ACE, Suit.SPADES));
         hand.addCard(new Card(ACE, Suit.SPADES));
         assertEquals(hand.score(), 17);
-    }
+    }*/
 }

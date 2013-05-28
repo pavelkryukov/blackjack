@@ -94,8 +94,8 @@ public final class Casino extends CasinoPublic {
             // Drop cards off
             entry.getValue().DropCards();
             // Give two cards to everybody
-            entry.getValue().GetCard(deck.GetCard());
-            entry.getValue().GetCard(deck.GetCard());
+            entry.getValue().GiveCard(deck.GetCard());
+            entry.getValue().GiveCard(deck.GetCard());
         }
         isGame = true;
     }
@@ -139,7 +139,7 @@ public final class Casino extends CasinoPublic {
         }
         else if (req.IsGive()) {
             if (players.get(id).IsInGame()) {
-                players.get(id).GetCard(deck.GetCard());
+                players.get(id).GiveCard(deck.GetCard());
             }
             else {
                 System.out.println("Player " + id + " is not in game anymore, request dropped");
