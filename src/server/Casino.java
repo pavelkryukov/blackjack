@@ -137,7 +137,7 @@ public final class Casino extends CasinoPublic {
             System.out.println("Player " + id + " disconnected");
             players.remove(id);
         }
-        else if (req.IsGive()) {
+        else if (req.IsHit()) {
             if (players.get(id).IsInGame()) {
                 players.get(id).GiveCard(deck.GetCard());
             }

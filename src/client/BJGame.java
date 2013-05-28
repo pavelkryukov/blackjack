@@ -120,7 +120,7 @@ public class BJGame extends BasicGame {
 
         hit_button = new SimpleButton(new Rectangle(490, 350, 150, 50), resources.hit_up, resources.hit_down);
         hit_button.addListener(new ClickListener() {
-            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.GIVE);}
+            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.HIT);}
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });
@@ -128,7 +128,7 @@ public class BJGame extends BasicGame {
 
         stand_button = new SimpleButton(new Rectangle(650, 350, 150, 50), resources.stand_up, resources.stand_down);
         stand_button.addListener(new ClickListener() {
-            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.RESIGN);}
+            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.STAND);}
             public void onDoubleClick(Button clicked, float mx, float my) {}
             public void onRightClick(Button clicked, float mx, float my) {}
         });

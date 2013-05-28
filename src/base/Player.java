@@ -73,7 +73,7 @@ public class Player implements Serializable {
      */
     public void ProcessRequest(Request req) throws InvalidRequestException {
         switch (req.GetType()) {
-        case RESIGN:
+        case STAND:
             this.LoseGame();
             break;
         case START:
