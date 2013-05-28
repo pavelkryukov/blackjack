@@ -10,18 +10,11 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import base.CasinoPublic;
 import base.Request;
 
 public class GameServer {
-	/**
-	 *  Queue of incoming requests
-	 */
-	private Queue<Request> requests;
-
 	private Broadcaster broadcaster;
 	
 	/**
@@ -44,7 +37,6 @@ public class GameServer {
 		this.casino = new Casino();
 		this.casinoO = new ByteArrayOutputStream();
 		this.UpdateCasinoPublic();
-		this.requests = new LinkedList<Request>();
 		this.broadcaster = new Broadcaster(this);
 		broadcaster.start();
 
@@ -60,18 +52,10 @@ public class GameServer {
 	private void Run()
 	{
 		while (true) {
-			ReadCommands(); // Read commands from socket
-			DoCommands();   // Perform actions on Casino
+			Request request = ReadRequest(); // Read commands from socket
+			if (request != null)
+				this.casino.ProcessRequest(request);
 			UpdateCasinoPublic();
-		}
-	}
-
-	/**
-	 * Perform action on Casino
-	 */
-	private void DoCommands() {
-		while (!requests.isEmpty()) {
-			this.casino.ProcessRequest(requests.poll());
 		}
 	}
 	
@@ -92,7 +76,7 @@ public class GameServer {
 	/**
 	 * Read commands from clients
 	 */
-	private void ReadCommands() {
+	private Request ReadRequest() {
 		try {                
 			Socket clientConn = serverSocket.accept();
 			broadcaster.AddAddress(clientConn.getInetAddress());
@@ -101,7 +85,7 @@ public class GameServer {
             try {
                 Object object = (Request) objectInput.readObject();
                 Request tmp = (Request) object;
-                requests.add(tmp);
+                return tmp;
             } catch (ClassNotFoundException e) {
             	System.out.println("Incorrect request is received");
                 e.printStackTrace();
@@ -113,6 +97,7 @@ public class GameServer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
 	/**
