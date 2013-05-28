@@ -21,6 +21,10 @@ public class GameServer {
 	 * Casino state
 	 */
 	private Casino casino;
+	
+	/**
+	 * Serialized version of casino for transmission
+	 */
 	private ByteArrayOutputStream casinoO;
 	public ByteArrayOutputStream GetCasinoPublic() {
 		return casinoO;
