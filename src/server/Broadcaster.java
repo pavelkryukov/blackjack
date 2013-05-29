@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public final class Broadcaster extends Thread {
@@ -48,7 +49,8 @@ public final class Broadcaster extends Thread {
                 bytes = gs.GetCasinoPublic().toByteArray();
             }
             // Send to every address
-            for (InetAddress address : addresses) {
+            for (Iterator<InetAddress> it = addresses.iterator(); it.hasNext(); ) {
+                InetAddress address = it.next();
                 try {
                     Socket clientSocket = new Socket(address, 7500);
                     clientSocket.getOutputStream().write(bytes);
@@ -56,7 +58,7 @@ public final class Broadcaster extends Thread {
                 } catch (IOException e) {
                     // Connection failed, delete this address from set
                     System.out.println("Invalid IP " + address.toString());
-                    addresses.remove(address);
+                    it.remove();
                 }
             }
         }
