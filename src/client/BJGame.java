@@ -91,7 +91,18 @@ public class BJGame extends BasicGame {
 		}
         System.out.println("Request sent");
 	}
-        
+
+	public boolean closeRequested() {
+		try {
+			sendReqest(Request.Type.DISCONNECT);
+		} catch (IOException | InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        System.out.println("bye bye");
+		return true;
+	}
+
     public void init(GameContainer container) throws SlickException {
     	resources = new Resources();
     	resources.load();
