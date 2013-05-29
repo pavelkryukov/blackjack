@@ -27,10 +27,9 @@ public class BJGame extends BasicGame {
 	
 	public static CasinoPublic casino;
 	public CasinoDrawer cdr;
-	
+
 	public SimpleButton hit_button;
 	public SimpleButton stand_button;
-	
 	public SimpleButton start_button;
 	public SimpleButton refresh_button;
 
@@ -110,15 +109,7 @@ public class BJGame extends BasicGame {
         listener = new StickyListener();
         container.getInput().addListener(listener);
 
-        refresh_button = new SimpleButton(new Rectangle(330, 350, 150, 50), resources.refresh_up, resources.refresh_down);
-        refresh_button.addListener(new ClickListener() {
-            public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.REFRESH);}
-            public void onDoubleClick(Button clicked, float mx, float my) {}
-            public void onRightClick(Button clicked, float mx, float my) {}
-        });
-        listener.add(refresh_button);
-
-        hit_button = new SimpleButton(new Rectangle(490, 350, 150, 50), resources.hit_up, resources.hit_down);
+        hit_button = new SimpleButton(new Rectangle(410, 350, 150, 50), resources.hit_up, resources.hit_down);
         hit_button.addListener(new ClickListener() {
             public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.HIT);}
             public void onDoubleClick(Button clicked, float mx, float my) {}
@@ -126,7 +117,7 @@ public class BJGame extends BasicGame {
         });
         listener.add(hit_button);
 
-        stand_button = new SimpleButton(new Rectangle(650, 350, 150, 50), resources.stand_up, resources.stand_down);
+        stand_button = new SimpleButton(new Rectangle(570, 350, 150, 50), resources.stand_up, resources.stand_down);
         stand_button.addListener(new ClickListener() {
             public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.STAND);}
             public void onDoubleClick(Button clicked, float mx, float my) {}
@@ -134,7 +125,7 @@ public class BJGame extends BasicGame {
         });
         listener.add(stand_button);
  
-        start_button = new SimpleButton(new Rectangle(810, 350, 150, 50), resources.start_up, resources.start_down);
+        start_button = new SimpleButton(new Rectangle(730, 350, 150, 50), resources.start_up, resources.start_down);
         start_button.addListener(new ClickListener() {
             public void onClick(Button clicked, float mx, float my) {ButtonAction(Request.Type.START);}
             public void onDoubleClick(Button clicked, float mx, float my) {}
@@ -161,7 +152,6 @@ public class BJGame extends BasicGame {
         hit_button.update(container, delta);
         stand_button.update(container, delta);
 	    start_button.update(container, delta);
-		refresh_button.update(container, delta);
     }
     
     public void render(GameContainer container, Graphics g) throws SlickException {
@@ -173,6 +163,5 @@ public class BJGame extends BasicGame {
    	    start_button.render(container, g);
    		hit_button.render(container, g);
    		stand_button.render(container, g);
-   		refresh_button.render(container, g);
     }
 }
