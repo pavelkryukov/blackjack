@@ -86,7 +86,5 @@ public class Resources {
         stand_down            = new Image("images/buttons/stand_down.png");
         start_up			  = new Image("images/buttons/start_up.png");
         start_down			  = new Image("images/buttons/start_down.png");
-        refresh_up			  = new Image("images/buttons/refresh_up.png");
-        refresh_down		  = new Image("images/buttons/refresh_down.png");
 	}
 }
