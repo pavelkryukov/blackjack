@@ -96,6 +96,7 @@ public final class Casino extends CasinoPublic {
             // Give two cards to everybody
             entry.getValue().GiveCard(deck.GetCard());
             entry.getValue().GiveCard(deck.GetCard());
+            UpdateState();
         }
         isGame = true;
     }
